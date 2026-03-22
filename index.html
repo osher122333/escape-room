@@ -18,15 +18,23 @@ body {
     align-items: center;
 }
 
-/* מרכז את המשחק */
 .container {
     width: 100%;
     max-width: 600px;
     padding: 15px;
 }
 
-.room { display: none; padding: 20px; }
+.room {
+    display: none;
+    padding: 20px;
+    animation: fadeIn 0.5s;
+}
 .active { display: block; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
 
 button, input {
     padding: 12px;
@@ -38,15 +46,20 @@ button, input {
     border: none;
 }
 
-/* כפתור יפה */
 button {
     background: gold;
     color: black;
     font-weight: bold;
     cursor: pointer;
+    box-shadow: 0 0 10px gold;
+    transition: 0.2s;
 }
 
-/* טיימר */
+button:hover {
+    box-shadow: 0 0 20px gold;
+    transform: scale(1.05);
+}
+
 #timer {
     position: fixed;
     top: 10px;
@@ -55,25 +68,20 @@ button {
     font-size: 20px;
 }
 
-/* התאמה לטלפון */
 @media (max-width: 768px) {
-    h1 {
-        font-size: 22px;
-    }
-
-    button, input {
-        font-size: 18px;
-        width: 95%;
-    }
-
-    .room {
-        padding: 10px;
-    }
+    h1 { font-size: 22px; }
+    button, input { font-size: 18px; width: 95%; }
+    .room { padding: 10px; }
 }
 </style>
 </head>
 
 <body>
+
+<!-- סאונדים -->
+<audio id="winSound" src="https://www.soundjay.com/human/applause-8.mp3"></audio>
+<audio id="wrongSound" src="https://www.soundjay.com/button/beep-10.mp3"></audio>
+<audio id="clickSound" src="https://www.soundjay.com/button/button-16.mp3"></audio>
 
 <div id="timer">20:00</div>
 
@@ -143,13 +151,19 @@ button {
 <div id="win" class="room">
 <h2>🎉 ניצחת!</h2>
 <p>ברחתם ממצרים 😎🔥</p>
+<div style="font-size:40px;">🏆🏆🏆</div>
 </div>
 
 </div>
 
 <script>
 
+function play(id){
+document.getElementById(id).play();
+}
+
 function go(id){
+play("clickSound");
 document.querySelectorAll('.room').forEach(r=>r.classList.remove('active'));
 document.getElementById(id).classList.add('active');
 }
@@ -158,7 +172,10 @@ function clean(v){
 return v.replace(/\s/g,'');
 }
 
-function wrong(){ alert("❌ לא נכון"); }
+function wrong(){
+play("wrongSound");
+alert("❌ לא נכון");
+}
 
 function c1(){ if(clean(a1.value).includes("חירות")) go("q2"); else wrong(); }
 function c2(){ if(clean(a2.value).includes("דם")) go("q3"); else wrong(); }
@@ -169,7 +186,13 @@ function c6(){ if(clean(a6.value).includes("בת")||clean(a6.value).includes("פ
 function c7(){ if(clean(a7.value).includes("סיני")) go("q8"); else wrong(); }
 function c8(){ if(clean(a8.value).includes("לא")||clean(a8.value).includes("הספיק")) go("q9"); else wrong(); }
 function c9(){ if(clean(a9.value).includes("פרעה")) go("q10"); else wrong(); }
-function c10(){ if(clean(a10.value).includes("סדר")) go("win"); else wrong(); }
+
+function c10(){
+if(clean(a10.value).includes("סדר")){
+play("winSound");
+go("win");
+} else wrong();
+}
 
 let time = 1200;
 setInterval(()=>{
