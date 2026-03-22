@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>חדר בריחה פסח</title>
+
+<style>
+body {
+    margin: 0;
+    background: black;
+    color: gold;
+    font-family: Arial;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* מרכז את המשחק */
+.container {
+    width: 100%;
+    max-width: 600px;
+    padding: 15px;
+}
+
+.room { display: none; padding: 20px; }
+.active { display: block; }
+
+button, input {
+    padding: 12px;
+    font-size: 16px;
+    margin: 10px;
+    width: 90%;
+    max-width: 300px;
+    border-radius: 10px;
+    border: none;
+}
+
+/* כפתור יפה */
+button {
+    background: gold;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* טיימר */
+#timer {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    color: red;
+    font-size: 20px;
+}
+
+/* התאמה לטלפון */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 22px;
+    }
+
+    button, input {
+        font-size: 18px;
+        width: 95%;
+    }
+
+    .room {
+        padding: 10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="timer">20:00</div>
+
+<div class="container">
+
+<h1>🏺 הבריחה ממצרים 🏺</h1>
+
+<div id="start" class="room active">
+<p>
+יש לכם 20 דקות לברוח<br>
+פתרו את כל החידות לפי הסדר<br>
+הקלידו תשובה ולחצו בדוק
+</p>
+<button onclick="go('q1')">התחל</button>
+</div>
+
+<div id="q1" class="room">
+<p>סדר את האותיות למילה אחת<br>י ח ר ו ת</p>
+<input id="a1"><button onclick="c1()">בדוק</button>
+</div>
+
+<div id="q2" class="room">
+<p>איזו מכה הפכה מים לדם</p>
+<input id="a2"><button onclick="c2()">בדוק</button>
+</div>
+
+<div id="q3" class="room">
+<p>סדר לפי הסדר<br>דם, חושך, בכורות<br>כתוב קוד עם מקפים (-)</p>
+<input id="a3"><button onclick="c3()">בדוק</button>
+</div>
+
+<div id="q4" class="room">
+<p>חשב את ערך המילה: חי בגימטריה</p>
+<input id="a4"><button onclick="c4()">בדוק</button>
+</div>
+
+<div id="q5" class="room">
+<p>מה נקרע כדי שבני ישראל יעברו</p>
+<input id="a5"><button onclick="c5()">בדוק</button>
+</div>
+
+<div id="q6" class="room">
+<p>מי מצאה את משה בתיבה</p>
+<input id="a6"><button onclick="c6()">בדוק</button>
+</div>
+
+<div id="q7" class="room">
+<p>באיזה הר ניתנה התורה</p>
+<input id="a7"><button onclick="c7()">בדוק</button>
+</div>
+
+<div id="q8" class="room">
+<p>למה אוכלים מצות בפסח</p>
+<input id="a8"><button onclick="c8()">בדוק</button>
+</div>
+
+<div id="q9" class="room">
+<p>מי שלט במצרים</p>
+<input id="a9"><button onclick="c9()">בדוק</button>
+</div>
+
+<div id="q10" class="room">
+<p>איך נקרא הלילה של חג הפסח</p>
+<input id="a10"><button onclick="c10()">בדוק</button>
+</div>
+
+<div id="win" class="room">
+<h2>🎉 ניצחת!</h2>
+<p>ברחתם ממצרים 😎🔥</p>
+</div>
+
+</div>
+
+<script>
+
+function go(id){
+document.querySelectorAll('.room').forEach(r=>r.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+}
+
+function clean(v){
+return v.replace(/\s/g,'');
+}
+
+function wrong(){ alert("❌ לא נכון"); }
+
+function c1(){ if(clean(a1.value).includes("חירות")) go("q2"); else wrong(); }
+function c2(){ if(clean(a2.value).includes("דם")) go("q3"); else wrong(); }
+function c3(){ if(clean(a3.value)=="1-9-10") go("q4"); else wrong(); }
+function c4(){ if(clean(a4.value)=="18") go("q5"); else wrong(); }
+function c5(){ if(clean(a5.value).includes("ים")) go("q6"); else wrong(); }
+function c6(){ if(clean(a6.value).includes("בת")||clean(a6.value).includes("פרעה")) go("q7"); else wrong(); }
+function c7(){ if(clean(a7.value).includes("סיני")) go("q8"); else wrong(); }
+function c8(){ if(clean(a8.value).includes("לא")||clean(a8.value).includes("הספיק")) go("q9"); else wrong(); }
+function c9(){ if(clean(a9.value).includes("פרעה")) go("q10"); else wrong(); }
+function c10(){ if(clean(a10.value).includes("סדר")) go("win"); else wrong(); }
+
+let time = 1200;
+setInterval(()=>{
+time--;
+let m = Math.floor(time/60);
+let s = time%60;
+document.getElementById("timer").innerText = m+":"+(s<10?"0":"")+s;
+if(time<=0){
+alert("💀 נגמר הזמן!");
+location.reload();
+}
+},1000);
+
+</script>
+
+</body>
+</html>
